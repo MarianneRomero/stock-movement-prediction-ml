@@ -1,0 +1,28 @@
+# Paths
+data:
+  raw: "data/raw/"
+  processed: "data/processed/"
+  interim: "data/interim/"
+
+tickers: ["AAPL", "MSFT", "GOOG", "AMZN", "NVDA", "JPM", "BAC", "JNJ", "PFE", "DIS", "KO", "BA", "XOM", "BHP", "NEE", "T", "SPY", "QQQ", "IWM", "VTI"]
+macro_tickers: ['^VIX', 'CL=F', '^TNX']  # VIX, WTI Oil, 10Y Treasury
+market_indices: ["^GSPC", "^NDX", "^RUT", "^DJI"]
+
+features:
+  selected: ['return_1d', 'return_3d', 'return_5d', 'volume_ratio', 'rsi', 'macd', 'macd_hist', 'price_ma5_ratio', 'price_ma20_ratio', 'price_volume']
+  macro_features: ['VIX_ret', 'WTI_ret', 'TNX_ret', 'VIX_5d_mean', 'WTI_5d_std']
+
+
+model:
+  name: "xgboost" 
+  params:
+    objective: "multi:softprob"
+    num_class: 3
+    eval_metric: "mlogloss"
+    random_state: 42
+
+# Evaluation
+evaluation:
+  metrics: ["accuracy", "f1", "roc_auc"]
+  test_split: 0.2
+  random_seed: 42
