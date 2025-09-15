@@ -40,31 +40,18 @@ market_data = yf.download(market_indices, start=start_date, end=end_date)['Close
 market_data.rename(columns={'^GSPC':'GSPC', '^NDX':'NDX', '^RUT':'RUT', '^DJI':'DJI'}, inplace=True)
 market_data.to_csv(raw_data_path / "market_data_raw.csv")
 
-# Merge stock and macro data
+
 stock_data_long_format = stock_data.stack(level=1).reset_index()
 stock_data_long_format = stock_data_long_format.merge(macro_data.reset_index(), on='Date', how='left')
 stock_data_long_format = stock_data_long_format.merge(market_data.reset_index(), on='Date', how='left')
 
-# Creating target variables
-# defining three classes to eliminate noise: up, down, flat
-# threshold = 0.005  # 0.5%
-# future_return = (stock_data_long_format.groupby('Ticker')['Close'].shift(-1) / stock_data_long_format['Close']) - 1
-# stock_data_long_format['Target'] = 1  # default
-# stock_data_long_format.loc[future_return > threshold, 'Target'] = 2
-# stock_data_long_format.loc[future_return < -threshold, 'Target'] = 0
 
-
-# 3-day horizon
+print("Adding target variable for 3-day horizon...")
 future_return_3d = (stock_data_long_format.groupby('Ticker')['Close'].shift(-3) / stock_data_long_format['Close']) - 1
-threshold_3d = 0.002
+threshold_3d = config['features']['threshold_3d']
 stock_data_long_format['Target'] = 1
 stock_data_long_format.loc[future_return_3d > threshold_3d, 'Target'] = 2
 stock_data_long_format.loc[future_return_3d < -threshold_3d, 'Target'] = 0
-
-# stock_data_long_format['Target'] = stock_data_long_format.groupby('Ticker')['Close'].shift(-1) > stock_data_long_format['Close']
-# stock_data_long_format['Target'] = stock_data_long_format['Target'].astype(int)
-# stock_data_long_format = stock_data_long_format.dropna(subset=['Target'])
-
 
 
 stock_data_long_format.to_csv(interim_data_path / "data_with_target.csv")

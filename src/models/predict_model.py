@@ -28,12 +28,12 @@ y_proba = model.predict_proba(X_test)
 prediction_dir = Path(__file__).resolve().parents[2]/ "experiments" / "run1"
 prediction_dir.mkdir(parents=True, exist_ok=True) 
 
-print("Saving this run's predictions")
+print("Saving this run's predictions...")
 df_pred = pd.DataFrame(y_pred, columns=["Target"])
 df_pred.to_csv(prediction_dir / "predictions.csv")
 
 df_prob = pd.DataFrame(y_proba, columns=['Prob_Down', 'Prob_Flat', 'Prob_Up'])
 df_prob.to_csv(prediction_dir / "predictions_prob.csv")
 
-print("Copying this run's config")
+print("Copying this run's config...")
 shutil.copy(config_path, prediction_dir)

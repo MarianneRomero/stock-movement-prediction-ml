@@ -9,6 +9,7 @@ macro_tickers: ['^VIX', 'CL=F', '^TNX']  # VIX, WTI Oil, 10Y Treasury
 market_indices: ["^GSPC", "^NDX", "^RUT", "^DJI"]
 
 features:
+  threshold_3d: 0.002
   selected: ['return_1d', 'return_3d', 'return_5d', 'volume_ratio', 'rsi', 'macd', 'macd_hist', 'price_ma5_ratio', 'price_ma20_ratio', 'price_volume']
   macro_features: ['VIX_ret', 'WTI_ret', 'TNX_ret', 'VIX_5d_mean', 'WTI_5d_std']
 
