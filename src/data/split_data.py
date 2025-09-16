@@ -16,8 +16,6 @@ data_with_fts_path = processed_data_path / "data_with_fts.csv"
 
 print("Loading data...")
 data = pd.read_csv(data_with_fts_path, index_col=0)
-print(data.head)
-
 
 # ===== One-hot encode the ticker values =====
 
@@ -35,7 +33,18 @@ data = pd.concat(
 
 # ===== Do training/test split =====
 
-feature_columns = config['features']['selected'] + config['features']['macro_features'] + new_cols.tolist()
+feature_columns = config['features']['retuns']\
+    + config['features']['rolling_volatility']\
+    + config['features']['moving_avg']\
+    + config['features']['momentum_indicators']\
+    + config['features']['macro_features']\
+    + config['features']['volume_features']\
+    + config['features']['market_index_features']\
+    + config['features']['atr']\
+    + config['features']['bb']\
+    + config['features']['price_range']\
+    + new_cols.tolist()
+
 test_split = config['evaluation']['test_split']
 
 X = data[feature_columns + ['Date', 'Close', 'Ticker']]

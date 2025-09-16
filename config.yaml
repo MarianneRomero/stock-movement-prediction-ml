@@ -9,9 +9,17 @@ macro_tickers: ['^VIX', 'CL=F', '^TNX']  # VIX, WTI Oil, 10Y Treasury
 market_indices: ["^GSPC", "^NDX", "^RUT", "^DJI"]
 
 features:
-  threshold_3d: 0.002
-  selected: ['return_1d', 'return_3d', 'return_5d', 'volume_ratio', 'rsi', 'macd', 'macd_hist', 'price_ma5_ratio', 'price_ma20_ratio', 'price_volume']
+  threshold_3d: 0.005
+  retuns: ['return_1d', 'return_3d', 'return_5d']
+  rolling_volatility: ['rolling_std_5', 'rolling_std_10']
+  moving_avg: ['ma_5', 'ma_20', 'price_ma5_ratio', 'price_ma20_ratio', 'MA5_MA20_diff', 'MA5_MA20_ratio']
+  momentum_indicators: ['rsi', 'macd', 'macd_hist']
+  volume_features: ['vol_MA5', 'vol_MA20', 'vol_ratio_5', 'vol_ratio_20', 'price_volume']
   macro_features: ['VIX_ret', 'WTI_ret', 'TNX_ret', 'VIX_5d_mean', 'WTI_5d_std']
+  market_index_features: ["GSPC_return_1d", "NDX_return_1d", "RUT_return_1d", "DJI_return_1d", "GSPC_return_5d", "NDX_return_5d", "RUT_return_5d", "DJI_return_5d"]
+  atr: ['ATR_14', 'ATR_7']
+  bb: ['BB_width']
+  price_range: ['range_pct', 'OC_pct', 'range_5d']
 
 model:
   name: "xgboost" 
@@ -20,6 +28,15 @@ model:
     num_class: 3
     eval_metric: "mlogloss"
     random_state: 42
+
+    n_estimators: 800
+    learning_rate: 0.05
+    max_depth: 5
+    min_child_weight: 3
+    subsample: 0.8
+    colsample_bytree: 0.8
+    gamma: 1     
+    reg_lambda: 2
 
 evaluation:
   metrics: ["accuracy", "f1", "roc_auc"]

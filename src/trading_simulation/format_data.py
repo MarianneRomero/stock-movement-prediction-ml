@@ -9,7 +9,7 @@ with open(config_path, "r") as f:
     config = yaml.safe_load(f)
 
 processed_data_path = project_root / config["data"]["processed"] / 'X_test_sim.csv'
-prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run1"
+prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run2"
 
 print("Loading data...")
 X_test_sim = pd.read_csv(processed_data_path, index_col=0)

@@ -13,8 +13,8 @@ with open(config_path, "r") as f:
 
 print("Loading test data...")
 processed_data_path = project_root / config["data"]["processed"]
-X_test = pd.read_csv(processed_data_path / "X_test.csv")
-y_test = pd.read_csv(processed_data_path / "y_test.csv")
+X_test = pd.read_csv(processed_data_path / "X_test.csv", index_col=0)
+y_test = pd.read_csv(processed_data_path / "y_test.csv", index_col=0)
 
 print("Loading trained model...")
 model = joblib.load(Path(__file__).resolve().parent / "xgb_model.pkl")
@@ -25,7 +25,7 @@ y_proba = model.predict_proba(X_test)
 
 
 # ===== Saving predictions =====
-prediction_dir = Path(__file__).resolve().parents[2]/ "experiments" / "run1"
+prediction_dir = Path(__file__).resolve().parents[2]/ "experiments" / "run2"
 prediction_dir.mkdir(parents=True, exist_ok=True) 
 
 print("Saving this run's predictions...")

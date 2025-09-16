@@ -1,3 +1,5 @@
+import numpy as np
+from sklearn.utils import compute_class_weight
 import yaml
 from pathlib import Path
 import pandas as pd
@@ -14,19 +16,16 @@ with open(config_path, "r") as f:
 processed_data_path = project_root / config["data"]["processed"]
 
 print("Loading training data...")
-X_train = pd.read_csv(processed_data_path / "X_train.csv")
-y_train = pd.read_csv(processed_data_path / "y_train.csv")["Target"]
+X_train = pd.read_csv(processed_data_path / "X_train.csv", index_col=0) 
+y_train = pd.read_csv(processed_data_path / "y_train.csv", index_col=0)["Target"]
 
 
 # ===== Account for class imbalance =====
 
-class_counts = y_train.value_counts().to_dict()
-n_total = len(y_train)
-n_classes = len(class_counts)
-
-# Compute weights
-class_weights = {cls: n_total / (count * n_classes) for cls, count in class_counts.items()}
-weights = y_train.map(class_weights)
+classes = np.unique(y_train)
+weights_array = compute_class_weight("balanced", classes=classes, y=y_train)
+class_weights = dict(zip(classes, weights_array))
+sample_weight = y_train.map(class_weights)
 
 
 # ===== Train model =====
@@ -34,7 +33,7 @@ weights = y_train.map(class_weights)
 print("Training model...")
 model_params = config["model"]["params"]
 model = XGBClassifier(**model_params)
-model.fit(X_train, y_train, sample_weight=weights)
+model.fit(X_train, y_train, sample_weight=sample_weight)
 
 
 
