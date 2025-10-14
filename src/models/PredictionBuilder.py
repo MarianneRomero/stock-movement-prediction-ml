@@ -30,6 +30,7 @@ feature_columns = config['features']['returns']\
     + config['features']['price_range']
 # add one-hot encoded values
 
+threshold = 0.5
 
 model = joblib.load(Path(__file__).resolve().parent / "xgb_model.pkl")
 
@@ -43,13 +44,13 @@ class PredictionBuilder:
 
     def __init__(self):
         yesterday = date.today() - timedelta(days=1)
-        self.new_data = self.get_new_data("2025-01-02", yesterday.strftime("%Y-%m-%d"))
+        self.new_data = self._get_new_data("2025-01-02", yesterday.strftime("%Y-%m-%d"))
         self._compute_daily_returns_per_stock()
         # Compute portfolio-level daily returns
         self._compute_portfolio_returns()
     
 
-    def get_new_data(self, start_date, end_date):
+    def _get_new_data(self, start_date, end_date):
         # get data from yhfinance
         data = load_data(start_date, end_date)
         data_with_fts = create_features(data)
@@ -80,6 +81,8 @@ class PredictionBuilder:
 
         for date, group in df.groupby('Date'):
             group = group.copy()
+            group = group[abs(group['Prediction']) > 0.8] # keep only strong signals
+            # print(group['Prediction'].head(2))
             n_stocks = len(group)
             n_top = max(1, int(top_pct * n_stocks))
             n_bottom = max(1, int(bottom_pct * n_stocks))
