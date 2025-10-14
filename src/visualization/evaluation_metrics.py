@@ -28,7 +28,7 @@ with open(config_path, "r") as f:
 # --------------------------
 
 processed_data_path = project_root / config["data"]["processed"]
-prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run1"
+prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run3"
 
 y_pred = pd.read_csv(prediction_path / "predictions.csv", index_col=0)
 y_proba = pd.read_csv(prediction_path / "predictions_prob.csv", index_col=0)
@@ -54,8 +54,7 @@ print("\n📊 Classification Report:\n",
 
 # Confusion Matrix
 cm = confusion_matrix(y_test, y_pred)
-print(cm)
-'''
+
 plt.figure(figsize=(6,4))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
             xticklabels=["Down", "Flat", "Up"],
@@ -94,5 +93,3 @@ plt.show()
 xgb.plot_importance(model)
 plt.title("Feature Importance")
 plt.show()
-
-'''

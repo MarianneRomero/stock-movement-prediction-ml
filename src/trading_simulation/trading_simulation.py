@@ -10,7 +10,7 @@ config_path = project_root / "config.yaml"
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
 
-prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run2" / "trading_sim_data.csv"
+prediction_path = Path(__file__).resolve().parents[2]/ "experiments" / "run3" / "trading_sim_data.csv"
 data = pd.read_csv(prediction_path, index_col=0)
 
 holding_horizon = config['trading']['holding_horizon']

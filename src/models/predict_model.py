@@ -25,7 +25,7 @@ y_proba = model.predict_proba(X_test)
 
 
 # ===== Saving predictions =====
-prediction_dir = Path(__file__).resolve().parents[2]/ "experiments" / "run2"
+prediction_dir = Path(__file__).resolve().parents[2]/ "experiments" / "run3"
 prediction_dir.mkdir(parents=True, exist_ok=True) 
 
 print("Saving this run's predictions...")

@@ -1,11 +1,8 @@
-import pandas as pd
 import talib
 
-def create_features(data: pd.DataFrame) -> pd.DataFrame:
-    df = data.copy()
 
+def create_features(df):
     # ===== Macro features =====
-    macro_tickers = ['VIX', 'WTI_Oil', 'US10Y']
     df['VIX_ret'] = df['VIX'].pct_change()
     df['WTI_ret'] = df['WTI_Oil'].pct_change()
     df['TNX_ret'] = df['US10Y'].pct_change()

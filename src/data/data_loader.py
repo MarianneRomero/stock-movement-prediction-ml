@@ -47,11 +47,6 @@ stock_data_long_format = stock_data_long_format.merge(market_data.reset_index(),
 
 
 print("Adding target variable for 3-day horizon...")
-future_return_3d = (stock_data_long_format.groupby('Ticker')['Close'].shift(-3) / stock_data_long_format['Close']) - 1
-threshold_3d = config['features']['threshold_3d']
-stock_data_long_format['Target'] = 1
-stock_data_long_format.loc[future_return_3d > threshold_3d, 'Target'] = 2
-stock_data_long_format.loc[future_return_3d < -threshold_3d, 'Target'] = 0
-
+stock_data_long_format["Target"] = stock_data_long_format.groupby('Ticker')['Close'].pct_change(3).shift(-3)
 
 stock_data_long_format.to_csv(interim_data_path / "data_with_target.csv")

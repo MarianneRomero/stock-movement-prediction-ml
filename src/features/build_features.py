@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 import pandas as pd
-from create_features import create_features
+from feature_helpers import create_features
 
 project_root = Path(__file__).resolve().parents[2]
 config_path = project_root / "config.yaml"
@@ -13,9 +13,8 @@ interim_data_path = raw_data_path = project_root / config["data"]["interim"] / "
 processed_data_path = raw_data_path = project_root / config["data"]["processed"] / "data_with_fts.csv"
 
 
-data = pd.read_csv(interim_data_path, index_col=0)
+df = pd.read_csv(interim_data_path, index_col=0)
 
+df = create_features(df)
 
-data = create_features(data)
-
-data.to_csv(processed_data_path)
+df.to_csv(processed_data_path)
