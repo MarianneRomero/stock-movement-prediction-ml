@@ -46,7 +46,7 @@ stock_data_long_format = stock_data_long_format.merge(macro_data.reset_index(), 
 stock_data_long_format = stock_data_long_format.merge(market_data.reset_index(), on='Date', how='left')
 
 
-print("Adding target variable for 3-day horizon...")
-stock_data_long_format["Target"] = stock_data_long_format.groupby('Ticker')['Close'].pct_change(3).shift(-3)
+print("Adding target variable for 1-day horizon...")
+stock_data_long_format['Target'] = stock_data_long_format.groupby('Ticker')['Close'].pct_change(1).shift(-1)
 
 stock_data_long_format.to_csv(interim_data_path / "data_with_target.csv")
